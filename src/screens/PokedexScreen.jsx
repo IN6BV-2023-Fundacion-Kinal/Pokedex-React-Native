@@ -6,6 +6,10 @@ import PokemonList from '../components/PokemonList';
 export default function PokedexScreen() {
 
   const [pokemons, setPokemons] = useState([]);
+
+  //nos sirve para mandar a llamar a otra petición al momento de hacer un reload
+  const [nextUrl, setNextUrl] = useState(null);
+
   //console.log(pokemons);
 
   useEffect(  () => {
@@ -16,8 +20,10 @@ export default function PokedexScreen() {
 
   const loadPokemons = async () => {
     try {
-      const response = await getPokemonsApi();
+      const response = await getPokemonsApi( nextUrl );
       //console.log(response);
+      //console.log(response.next);
+      setNextUrl( response.next );
 
       const pokemonsArray = [];
 
@@ -47,7 +53,7 @@ export default function PokedexScreen() {
 
   return (
     <SafeAreaView>
-      <PokemonList listPokemon={ pokemons }/>
+      <PokemonList listPokemon={ pokemons } loadPokemons={ loadPokemons } isNext={ nextUrl } />
     </SafeAreaView>
   )
 }
