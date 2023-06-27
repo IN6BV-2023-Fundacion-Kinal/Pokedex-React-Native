@@ -1,6 +1,9 @@
-import { View, Text } from 'react-native'
+import { View, Text, ScrollView } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { getPokemonDetailsApi } from '../api/pokemon';
+import PokemonHeader from '../components/Pokemon/PokemonHeader';
+import PokemonType from '../components/Pokemon/PokemonType';
+import PokemonStats from '../components/Pokemon/PokemonStats';
 
 export default function PokemonScreen({ navigation, route: { params } }) {
 
@@ -23,12 +26,18 @@ export default function PokemonScreen({ navigation, route: { params } }) {
   }, [params]);
 
   //Rendirizar null cuando no se tenga una respuesta:
-  if( !pokemon ) return null;
+  if (!pokemon) return null;
 
   return (
     <View>
-      <Text>Hola acá veremos a  un pokemon en especifico y sus detalles </Text>
-      <Text> { pokemon.name } </Text>
+      <ScrollView>
+        <PokemonHeader nombre={ pokemon.name } numero={ pokemon.order }
+                       image={ pokemon.sprites.other["official-artwork"].front_default }
+                       tipo = { pokemon.types[0].type.name }
+        />
+        <PokemonType tipos={ pokemon.types } />
+        <PokemonStats estadisticas={ pokemon.stats }/>
+      </ScrollView>
     </View>
   )
 }
